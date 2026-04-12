@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EGK AI Adventure – Discovering Smart Helpers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky: #4FC3F7;
+  --deep-blue: #0A2A6B;
+  --royal: #1565C0;
+  --gold: #FFD600;
+  --amber: #FF8F00;
+  --coral: #FF5252;
+  --mint: #00C9A7;
+  --purple: #7C4DFF;
+  --soft-white: #F0F8FF;
+  --card-bg: rgba(255,255,255,0.95);
+  --shadow: 0 8px 40px rgba(10,42,107,0.15);
+  --radius: 20px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Baloo 2', cursive;
+  background: var(--soft-white);
+  color: var(--deep-blue);
+  overflow-x: hidden;
+}
+
+/* ===== STARS BACKGROUND ===== */
+.stars-bg {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  pointer-events: none; z-index:0;
+  overflow: hidden;
+}
+.star {
+  position: absolute; border-radius: 50%;
+  background: white; opacity: 0.5;
+  animation: twinkle 3s infinite alternate;
+}
+@keyframes twinkle { 0%{opacity:0.2;transform:scale(1)} 100%{opacity:0.8;transform:scale(1.4)} }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(10,42,107,0.97);
+  backdrop-filter: blur(12px);
+  padding: 12px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 24px rgba(0,0,0,0.3);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo img { height: 40px; border-radius: 8px; }
+.nav-logo span {
+  font-family: 'Fredoka One', cursive;
+  color: var(--gold);
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+}
+.nav-links {
+  display: flex; gap: 8px; align-items: center;
+  list-style: none;
+}
+.nav-links a {
+  color: #cde; text-decoration: none;
+  font-size: 0.88rem; font-weight: 700;
+  padding: 6px 14px; border-radius: 20px;
+  transition: all 0.25s;
+}
+.nav-links a:hover {
+  background: var(--gold); color: var(--deep-blue);
+}
+.nav-cta {
+  background: linear-gradient(135deg, var(--gold), var(--amber)) !important;
+  color: var(--deep-blue) !important;
+  font-weight: 800 !important;
+  padding: 8px 20px !important;
+}
+
+/* ===== HERO ===== */
+#hero {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #0A1F5C 0%, #0D47A1 40%, #1565C0 70%, #0288D1 100%);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 100px 20px 60px;
+  text-align: center;
+}
+
+/* floating shapes */
+.hero-blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(60px); opacity: 0.3;
+  pointer-events: none;
+}
+.blob1 { width:400px;height:400px; background:#FFD600; top:-100px; right:-80px; animation: drift 8s infinite alternate; }
+.blob2 { width:300px;height:300px; background:#00E5FF; bottom:-50px; left:-80px; animation: drift 10s infinite alternate-reverse; }
+.blob3 { width:200px;height:200px; background:#7C4DFF; top:40%; right:5%; animation: drift 12s infinite alternate; }
+@keyframes drift { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(30px,20px) scale(1.1)} }
+
+/* deco circles */
+.hero-deco {
+  position: absolute; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.12);
+  pointer-events: none;
+}
+.deco1 { width:600px;height:600px; top:50%;left:50%; transform:translate(-50%,-50%); }
+.deco2 { width:800px;height:800px; top:50%;left:50%; transform:translate(-50%,-50%); }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,214,0,0.2); border: 1.5px solid var(--gold);
+  color: var(--gold); font-size: 0.85rem; font-weight: 800;
+  padding: 6px 18px; border-radius: 50px;
+  margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase;
+  animation: fadeDown 0.6s ease;
+}
+@keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+
+.hero-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  animation: fadeUp 0.7s ease 0.1s both;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.hero-title span { color: var(--gold); }
+
+.hero-sub {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: #90CAF9;
+  max-width: 680px; margin: 0 auto 30px;
+  animation: fadeUp 0.7s ease 0.2s both;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+.hero-aida {
+  width: min(260px, 55vw);
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  animation: float 4s ease-in-out infinite, fadeUp 0.8s ease 0.3s both;
+  margin: 10px 0;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+
+.hero-desc {
+  font-size: 1.05rem; color: #B3E5FC;
+  max-width: 600px; margin: 0 auto 32px;
+  animation: fadeUp 0.7s ease 0.4s both;
+}
+
+.hero-btns {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  justify-content: center;
+  animation: fadeUp 0.7s ease 0.5s both;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 30px; border-radius: 50px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 1rem; font-weight: 800;
+  text-decoration: none; cursor: pointer; border: none;
+  transition: all 0.25s; letter-spacing: 0.3px;
+}
+.btn-gold {
+  background: linear-gradient(135deg, #FFD600, #FF8F00);
+  color: #0A2A6B;
+  box-shadow: 0 8px 28px rgba(255,214,0,0.45);
+}
+.btn-gold:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(255,214,0,0.6); }
+
+.btn-outline {
+  background: rgba(255,255,255,0.1);
+  color: white; border: 2px solid rgba(255,255,255,0.4);
+}
+.btn-outline:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+
+/* hero flags/tags */
+.hero-tags {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  margin-top: 28px;
+  animation: fadeUp 0.7s ease 0.6s both;
+}
+.htag {
+  background: rgba(255,255,255,0.12); color: #B3E5FC;
+  font-size: 0.82rem; font-weight: 700;
+  padding: 5px 14px; border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ===== SECTION COMMON ===== */
+section {
+  position: relative; z-index: 1;
+  padding: 80px 20px;
+}
+.container { max-width: 1200px; margin: 0 auto; }
+.section-label {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  color: var(--deep-blue);
+  font-size: 0.78rem; font-weight: 900;
+  padding: 4px 16px; border-radius: 50px;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-bottom: 14px;
+}
+.section-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: var(--deep-blue);
+  line-height: 1.2; margin-bottom: 16px;
+}
+.section-title span { color: var(--royal); }
+.section-desc {
+  font-size: 1.05rem; color: #4a6080;
+  max-width: 680px; line-height: 1.7;
+}
+.text-center { text-align: center; margin: 0 auto; }
+
+/* ===== ABOUT ===== */
+#about {
+  background: white;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center;
+  margin-top: 50px;
+}
+.about-img-wrap {
+  position: relative;
+}
+.about-img-wrap img {
+  width: 100%; border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+.about-badge {
+  position: absolute; bottom: -16px; right: -16px;
+  background: var(--gold); border-radius: 16px;
+  padding: 14px 20px; box-shadow: 0 8px 24px rgba(255,214,0,0.4);
+  font-weight: 900; font-size: 0.88rem; color: var(--deep-blue);
+  text-align: center; line-height: 1.4;
+}
+.about-badge strong { display: block; font-size: 1.6rem; }
+
+.about-pills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 20px 0;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #EEF4FF; color: var(--royal);
+  font-size: 0.85rem; font-weight: 700;
+  padding: 6px 14px; border-radius: 50px;
+  border: 1px solid #C5D8FF;
+}
+.pill-icon { font-size: 1rem; }
+
+.about-quote {
+  background: linear-gradient(135deg, #EEF4FF, #E8F0FE);
+  border-left: 4px solid var(--royal);
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px; margin-top: 24px;
+  font-style: italic; font-size: 1rem; color: #2c4a80;
+}
+
+/* ===== BOOKS ===== */
+#books {
+  background: linear-gradient(180deg, #f0f6ff 0%, #e8f0fe 100%);
+}
+.books-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 32px; margin-top: 50px;
+}
+.book-card {
+  background: white; border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow);
+  transition: all 0.35s; cursor: pointer;
+  position: relative;
+}
+.book-card:hover { transform: translateY(-10px) rotate(-1deg); box-shadow: 0 20px 60px rgba(10,42,107,0.2); }
+
+.book-covers {
+  display: flex; gap: 8px; padding: 20px 20px 0;
+  justify-content: center;
+}
+.book-cover {
+  width: 45%; border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  transition: transform 0.3s;
+}
+.book-card:hover .book-cover:first-child { transform: rotate(-3deg); }
+.book-card:hover .book-cover:last-child { transform: rotate(3deg); }
+
+.book-info {
+  padding: 20px;
+}
+.book-lang-tag {
+  display: inline-block;
+  font-size: 0.75rem; font-weight: 900;
+  padding: 3px 12px; border-radius: 50px;
+  margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
+}
+.lang-en { background: #E3F2FD; color: #1565C0; }
+.lang-ms { background: #E8F5E9; color: #2E7D32; }
+.lang-zh { background: #FFF3E0; color: #E65100; }
+
+.book-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem; color: var(--deep-blue);
+  margin-bottom: 6px;
+}
+.book-sub { font-size: 0.88rem; color: #607d8b; margin-bottom: 12px; }
+.book-isbn { font-size: 0.78rem; color: #9e9e9e; margin-bottom: 14px; }
+
+.book-ribbon {
+  position: absolute; top: 16px; left: -6px;
+  background: var(--coral); color: white;
+  font-size: 0.72rem; font-weight: 800;
+  padding: 4px 14px 4px 12px; border-radius: 0 4px 4px 0;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+}
+.book-ribbon::before {
+  content: '';
+  position: absolute; left: 0; bottom: -6px;
+  border: 3px solid transparent;
+  border-right-color: #c62828; border-top-color: #c62828;
+}
+
+/* ===== YEAR CHAPTERS ===== */
+#curriculum {
+  background: white;
+}
+.year-tabs {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin: 40px 0 10px;
+}
+.year-tab {
+  padding: 10px 22px; border-radius: 50px;
+  background: #EEF4FF; color: var(--royal);
+  font-weight: 800; font-size: 0.9rem; cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+.year-tab.active, .year-tab:hover {
+  background: var(--royal); color: white;
+  border-color: var(--royal);
+}
+
+.year-panel { display: none; }
+.year-panel.active { display: block; }
+
+.year-content {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 48px; align-items: start;
+  padding: 40px 0;
+}
+.year-text {}
+.year-icon-big {
+  font-size: 3rem; margin-bottom: 12px; display: block;
+}
+.year-heading {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem; color: var(--deep-blue); margin-bottom: 8px;
+}
+.year-tagline {
+  font-size: 1.1rem; color: var(--royal); font-weight: 700; margin-bottom: 16px;
+}
+.year-body {
+  font-size: 0.95rem; color: #4a6080; line-height: 1.8; margin-bottom: 20px;
+}
+.year-activities {
+  list-style: none; display: flex; flex-direction: column; gap: 8px;
+}
+.year-activities li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.92rem; color: #334;
+}
+.ya-dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--sky), var(--royal));
+  color: white; font-size: 0.72rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+
+.year-visual {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.skill-card {
+  background: linear-gradient(135deg, #EEF4FF, #E8F0FE);
+  border-radius: 14px; padding: 16px 20px;
+  border-left: 4px solid var(--royal);
+}
+.skill-card-title { font-weight: 800; color: var(--deep-blue); margin-bottom: 4px; font-size: 0.92rem; }
+.skill-card-body { font-size: 0.85rem; color: #607d8b; }
+
+.year-badge-earn {
+  margin-top: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  border-radius: 14px; padding: 14px 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.badge-icon { font-size: 2rem; }
+.badge-text strong { display: block; font-size: 0.95rem; color: var(--deep-blue); }
+.badge-text span { font-size: 0.82rem; color: #5d4000; }
+
+/* ===== 4 PILLARS ===== */
+#pillars {
+  background: linear-gradient(160deg, var(--deep-blue) 0%, #0D47A1 60%, #1565C0 100%);
+  color: white;
+}
+#pillars .section-title { color: white; }
+#pillars .section-desc { color: #90CAF9; }
+
+.pillars-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 24px; margin-top: 50px;
+}
+.pillar-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius); padding: 32px 22px;
+  text-align: center; transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.pillar-card::before {
+  content: '';
+  position: absolute; inset: 0; opacity: 0;
+  transition: opacity 0.3s;
+}
+.pillar-card:nth-child(1)::before { background: linear-gradient(135deg, rgba(79,195,247,0.2), transparent); }
+.pillar-card:nth-child(2)::before { background: linear-gradient(135deg, rgba(0,201,167,0.2), transparent); }
+.pillar-card:nth-child(3)::before { background: linear-gradient(135deg, rgba(255,214,0,0.2), transparent); }
+.pillar-card:nth-child(4)::before { background: linear-gradient(135deg, rgba(124,77,255,0.2), transparent); }
+.pillar-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.4); }
+.pillar-card:hover::before { opacity: 1; }
+
+.pillar-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 3.5rem; line-height: 1;
+  opacity: 0.2; position: absolute; top: 14px; right: 18px;
+}
+.pillar-icon { font-size: 2.8rem; margin-bottom: 14px; display: block; }
+.pillar-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem; margin-bottom: 10px; color: var(--gold);
+}
+.pillar-body { font-size: 0.88rem; color: #90CAF9; line-height: 1.7; }
+
+/* ===== APP DOWNLOAD ===== */
+#app {
+  background: white;
+}
+.app-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center; margin-top: 50px;
+}
+.app-visual {
+  position: relative; text-align: center;
+}
+.app-aida {
+  width: 200px;
+  animation: float 4s ease-in-out infinite;
+  filter: drop-shadow(0 16px 40px rgba(21,101,192,0.3));
+}
+.app-glow {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 280px; height: 280px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,195,247,0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.app-features {
+  display: flex; flex-direction: column; gap: 14px; margin: 24px 0;
+}
+.app-feat {
+  display: flex; align-items: center; gap: 14px;
+  background: #F8FBFF; border-radius: 12px; padding: 14px 16px;
+  border: 1px solid #E3EDF8;
+}
+.feat-icon { font-size: 1.6rem; flex-shrink: 0; }
+.feat-text strong { display: block; font-size: 0.92rem; color: var(--deep-blue); }
+.feat-text span { font-size: 0.82rem; color: #607d8b; }
+
+.app-dl-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+.app-btn {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--deep-blue); color: white;
+  padding: 12px 22px; border-radius: 14px;
+  text-decoration: none; transition: all 0.25s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.app-btn:hover { background: var(--royal); transform: translateY(-3px); }
+.app-btn-icon { font-size: 1.8rem; }
+.app-btn-text small { display: block; font-size: 0.72rem; opacity: 0.7; }
+.app-btn-text strong { font-size: 1rem; }
+.app-btn-img { height: 42px; }
+
+/* ===== AIDA SECTION ===== */
+#meet-aida {
+  background: linear-gradient(160deg, #FFF8E1, #FFF3CD, #FFF8E1);
+}
+.aida-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center; margin-top: 50px;
+}
+.aida-img-wrap {
+  text-align: center; position: relative;
+}
+.aida-main {
+  width: min(280px, 80%);
+  animation: float 4s ease-in-out infinite;
+  filter: drop-shadow(0 20px 40px rgba(255,143,0,0.3));
+}
+.aida-ring {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 320px; height: 320px; border-radius: 50%;
+  border: 3px dashed rgba(255,143,0,0.3);
+  animation: spin 20s linear infinite;
+}
+@keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+.aida-bubble {
+  position: absolute; background: white;
+  border-radius: 14px; padding: 10px 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  font-size: 0.82rem; font-weight: 700; color: var(--deep-blue);
+  white-space: nowrap;
+}
+.aida-bubble::after {
+  content: ''; position: absolute;
+  border: 6px solid transparent;
+}
+.ab1 { top: 10%; right: -20px; }
+.ab1::after { left: -12px; top: 50%; transform: translateY(-50%); border-right-color: white; }
+.ab2 { bottom: 15%; left: -30px; }
+.ab2::after { right: -12px; top: 50%; transform: translateY(-50%); border-left-color: white; }
+.ab3 { top: 50%; right: -25px; transform: translateY(-50%); }
+.ab3::after { left: -12px; top: 50%; transform: translateY(-50%); border-right-color: white; }
+
+.aida-traits {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0;
+}
+.trait {
+  background: white; border-radius: 12px; padding: 14px 16px;
+  box-shadow: 0 4px 16px rgba(255,143,0,0.1);
+  border: 1px solid rgba(255,143,0,0.15);
+}
+.trait-icon { font-size: 1.4rem; margin-bottom: 4px; }
+.trait-name { font-size: 0.88rem; font-weight: 800; color: var(--deep-blue); }
+.trait-desc { font-size: 0.78rem; color: #607d8b; }
+
+/* ===== UNESCO ===== */
+#compliance {
+  background: white;
+}
+.compliance-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; margin-top: 50px;
+}
+.comp-card {
+  border-radius: var(--radius); padding: 28px 24px;
+  text-align: center; position: relative; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+}
+.comp-card:hover { transform: translateY(-6px); }
+.comp-card:nth-child(1) { background: linear-gradient(135deg, #E3F2FD, #BBDEFB); }
+.comp-card:nth-child(2) { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); }
+.comp-card:nth-child(3) { background: linear-gradient(135deg, #FFF3E0, #FFE0B2); }
+.comp-card:nth-child(4) { background: linear-gradient(135deg, #F3E5F5, #E1BEE7); }
+.comp-card:nth-child(5) { background: linear-gradient(135deg, #E0F2F1, #B2DFDB); }
+.comp-card:nth-child(6) { background: linear-gradient(135deg, #FFF8E1, #FFECB3); }
+.comp-icon { font-size: 2.4rem; margin-bottom: 12px; }
+.comp-title { font-weight: 800; font-size: 0.95rem; color: var(--deep-blue); margin-bottom: 6px; }
+.comp-body { font-size: 0.82rem; color: #4a6080; line-height: 1.6; }
+
+/* ===== TESTIMONIALS / MALAYSIA THEMES ===== */
+#malaysia {
+  background: linear-gradient(160deg, #0A2A6B, #0D47A1);
+  color: white;
+}
+#malaysia .section-title { color: white; }
+#malaysia .section-desc { color: #90CAF9; }
+
+.malaysia-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 20px; margin-top: 50px;
+}
+.mcard {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius); padding: 24px 18px;
+  text-align: center; transition: all 0.3s;
+}
+.mcard:hover { background: rgba(255,255,255,0.15); transform: scale(1.04); }
+.mcard-icon { font-size: 2.8rem; margin-bottom: 10px; }
+.mcard-title { font-weight: 800; font-size: 0.92rem; color: var(--gold); margin-bottom: 6px; }
+.mcard-body { font-size: 0.82rem; color: #90CAF9; line-height: 1.6; }
+
+/* ===== GLOSSARY PREVIEW ===== */
+#glossary {
+  background: #F0F6FF;
+}
+.glossary-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px; margin-top: 40px;
+}
+.gterm {
+  background: white; border-radius: 12px; padding: 14px 16px;
+  border-left: 3px solid var(--royal);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: transform 0.2s;
+}
+.gterm:hover { transform: translateX(4px); }
+.gterm-word { font-weight: 800; font-size: 0.9rem; color: var(--deep-blue); margin-bottom: 2px; }
+.gterm-def { font-size: 0.8rem; color: #607d8b; line-height: 1.5; }
+
+/* ===== PROMISE ===== */
+#promise {
+  background: linear-gradient(135deg, #1A237E, #283593);
+  color: white; text-align: center;
+}
+#promise .section-title { color: white; }
+.promise-box {
+  max-width: 700px; margin: 40px auto 0;
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,214,0,0.4);
+  border-radius: 24px; padding: 48px 40px;
+  position: relative; overflow: hidden;
+}
+.promise-box::before {
+  content: '⭐';
+  position: absolute; font-size: 8rem; opacity: 0.04;
+  top: -20px; right: -20px;
+}
+.promise-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--gold); line-height: 1.7; margin-bottom: 24px;
+}
+.promise-sig {
+  font-size: 0.9rem; color: #90CAF9;
+}
+.promise-sig strong { color: white; }
+
+/* ===== FOUNDER ===== */
+#founder {
+  background: white;
+}
+.founder-grid {
+  display: grid; grid-template-columns: 300px 1fr;
+  gap: 60px; align-items: center; margin-top: 50px;
+}
+.founder-card {
+  background: linear-gradient(160deg, var(--deep-blue), var(--royal));
+  border-radius: 24px; padding: 36px 28px; text-align: center; color: white;
+}
+.founder-icon { font-size: 4rem; margin-bottom: 12px; }
+.founder-name { font-family: 'Fredoka One', cursive; font-size: 1.5rem; margin-bottom: 4px; }
+.founder-role { font-size: 0.88rem; color: #90CAF9; }
+.founder-company { font-size: 0.82rem; color: var(--gold); margin-top: 6px; font-weight: 700; }
+
+.founder-quote {
+  border-left: 4px solid var(--gold);
+  padding: 20px 24px; margin: 0 0 20px;
+  background: #FFF8E1; border-radius: 0 12px 12px 0;
+  font-style: italic; font-size: 1.05rem; color: var(--deep-blue);
+}
+.founder-contact {
+  display: flex; flex-direction: column; gap: 10px; margin-top: 20px;
+}
+.fc-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.9rem; color: #4a6080;
+}
+.fc-icon { font-size: 1.2rem; color: var(--royal); }
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--deep-blue); color: #90CAF9;
+  padding: 50px 20px 24px;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+  padding-bottom: 36px; border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.footer-logo img { height: 50px; margin-bottom: 14px; }
+.footer-about { font-size: 0.88rem; line-height: 1.7; }
+.footer-title { font-weight: 800; color: white; margin-bottom: 14px; font-size: 0.95rem; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-links a { color: #90CAF9; text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+.footer-links a:hover { color: var(--gold); }
+.footer-bottom {
+  max-width: 1200px; margin: 20px auto 0;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 10px;
+  font-size: 0.82rem;
+}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px) {
+  .about-grid, .year-content, .app-wrap, .aida-grid, .founder-grid { grid-template-columns: 1fr; }
+  .books-grid, .pillars-grid, .compliance-grid { grid-template-columns: 1fr 1fr; }
+  .malaysia-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .about-img-wrap { display: none; }
+  nav { padding: 10px 16px; }
+  .nav-links { display: none; }
+}
+@media(max-width:540px) {
+  .books-grid, .pillars-grid, .compliance-grid, .malaysia-grid { grid-template-columns: 1fr; }
+  .aida-traits { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars-bg" id="stars"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="https://egkhor.com.my/home/wp-content/uploads/2026/02/cropped-IMG_7598.png" alt="EGK Logo">
+    <span>EGK AI Adventure</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#books">Books</a></li>
+    <li><a href="#curriculum">Curriculum</a></li>
+    <li><a href="#meet-aida">Meet Aida</a></li>
+    <li><a href="#app">App</a></li>
+    <li><a href="#compliance">UNESCO</a></li>
+    <li><a href="mailto:sales@egkhor.com.my" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-deco deco1"></div>
+  <div class="hero-deco deco2"></div>
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="hero-blob blob3"></div>
+
+  <div class="hero-badge">🇲🇾 Malaysia's First &nbsp;|&nbsp; UNESCO Aligned &nbsp;|&nbsp; KSSR Year 1–6</div>
+  <h1 class="hero-title">EGK <span>AI Adventure</span><br>Discovering Smart Helpers</h1>
+  <p class="hero-sub">An AI Literacy Journey for Malaysian Primary Students — Years 1 to 6</p>
+  <img class="hero-aida" src="https://egkhor.com.my/home/wp-content/uploads/2026/04/aida.png" alt="Aida the AI Robot">
+  <p class="hero-desc">Join Aida the friendly AI robot and her best friend Amir as they explore how Artificial Intelligence helps Malaysia — from saving the Malayan tiger to predicting floods!</p>
+  <div class="hero-btns">
+    <a href="#books" class="btn btn-gold">📚 See All 3 Books</a>
+    <a href="#app" class="btn btn-outline">📱 Download Free App</a>
+    <a href="mailto:sales@egkhor.com.my" class="btn btn-outline">✉️ Order Now</a>
+  </div>
+  <div class="hero-tags">
+    <span class="htag">🌏 English</span>
+    <span class="htag">🇲🇾 Bahasa Melayu</span>
+    <span class="htag">🀄 中文</span>
+    <span class="htag">📐 KSSR Aligned</span>
+    <span class="htag">🎓 UNESCO Compliant</span>
+    <span class="htag">📱 AR App Included</span>
+    <span class="htag">🏅 6 Year Journey</span>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap reveal">
+        <img src="https://egkhor.com.my/home/wp-content/uploads/2025/12/Smart-Character-Edu-.png" alt="EGK AI Adventure Book Cover">
+        <div class="about-badge">
+          <strong>3</strong> Languages<br>6 Years<br>of Learning
+        </div>
+      </div>
+      <div class="reveal">
+        <span class="section-label">About the Book</span>
+        <h2 class="section-title">Malaysia's <span>First Complete</span> Primary AI Education Book</h2>
+        <p class="section-desc">You are holding a very special book — the <strong>FIRST book in Malaysia</strong> that teaches Artificial Intelligence (AI) the right way, from Year 1 all the way to Year 6. Designed by EGK Founder Isaac Khor to overwrite the K-12 AI curriculum gap at primary level.</p>
+        <div class="about-pills" style="margin-top:22px">
+          <span class="pill"><span class="pill-icon">🎯</span> UNESCO AI Framework 2022</span>
+          <span class="pill"><span class="pill-icon">📘</span> KSSR Year 1–6</span>
+          <span class="pill"><span class="pill-icon">🗺️</span> Malaysia Education Blueprint</span>
+          <span class="pill"><span class="pill-icon">🤖</span> National AI Roadmap 2021–2025</span>
+          <span class="pill"><span class="pill-icon">📱</span> Free AR App</span>
+          <span class="pill"><span class="pill-icon">✏️</span> No gadgets needed!</span>
+        </div>
+        <blockquote class="about-quote">
+          "To every curious child in Malaysia – may you grow up to build kind and fair AI."
+          <br><strong>— Isaac Khor Eng Gian, Author & Founder</strong>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BOOKS ===== -->
+<section id="books">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Three Languages, One Journey</span>
+      <h2 class="section-title">Available in <span>3 Languages</span></h2>
+      <p class="section-desc">Because Malaysia learns in English, Bahasa Melayu, and Chinese — every child deserves to discover AI in their own language.</p>
+    </div>
+    <div class="books-grid">
+
+      <!-- English -->
+      <div class="book-card reveal">
+        <div class="book-ribbon">🏅 First in Malaysia</div>
+        <div class="book-covers">
+          <img class="book-cover" src="https://egkhor.com.my/home/wp-content/uploads/2025/12/Smart-Character-Edu-.png" alt="EGK AI Adventure Front">
+          <img class="book-cover" src="https://egkhor.com.my/home/wp-content/uploads/2026/01/Untitled-9.png" alt="EGK AI Adventure Back">
+        </div>
+        <div class="book-info">
+          <span class="book-lang-tag lang-en">🇬🇧 English</span>
+          <div class="book-title">EGK AI Adventure</div>
+          <div class="book-sub">Discovering Smart Helpers</div>
+          <div class="book-isbn">eISBN: 978-629-94581-5-9</div>
+          <a href="https://buy.stripe.com/8x200igQ91WRend3IN6Zy05" class="btn btn-gold" style="font-size:0.88rem;padding:10px 22px">Order Now 📩</a>
+        </div>
+      </div>
+
+      <!-- Malay -->
+      <div class="book-card reveal">
+        <div class="book-covers">
+          <img class="book-cover" src="https://egkhor.com.my/home/wp-content/uploads/2025/12/EGK-Pengembaraan-AI-.png" alt="EGK Pengembaraan AI Front">
+          <img class="book-cover" src="https://egkhor.com.my/home/wp-content/uploads/2026/01/Untitled-7.png" alt="EGK Pengembaraan AI Back">
+        </div>
+        <div class="book-info">
+          <span class="book-lang-tag lang-ms">🇲🇾 Bahasa Melayu</span>
+          <div class="book-title">EGK Pengembaraan AI</div>
+          <div class="book-sub">Menemui Pembantu Pintar</div>
+          <div class="book-isbn">eISBN: 978-629-94581-4-2</div>
+          <a href="https://buy.stripe.com/4gM9AS0Rb7hbdj93IN6Zy04" class="btn btn-gold" style="font-size:0.88rem;padding:10px 22px">Order Now 📩</a>
+        </div>
+      </div>
+
+      <!-- Chinese -->
+      <div class="book-card reveal">
+        <div class="book-covers">
+          <img class="book-cover" src="https://egkhor.com.my/home/wp-content/uploads/2025/12/EGK-AI-探险之旅.png" alt="EGK 人工智能探险 Front">
+          <img class="book-cover" src="https://egkhor.com.my/home/wp-content/uploads/2026/01/backcoverAiCh.png" alt="EGK 人工智能探险 Back">
+        </div>
+        <div class="book-info">
+          <span class="book-lang-tag lang-zh">🀄 中文</span>
+          <div class="book-title">人工智能探险</div>
+          <div class="book-sub">发现聪明的助手</div>
+          <div class="book-isbn">eISBN: 978-629-94581-8-0</div>
+          <a href="https://buy.stripe.com/eVqdR857rcBv4MD4MR6Zy06" class="btn btn-gold" style="font-size:0.88rem;padding:10px 22px">Order Now 📩</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4 PILLARS ===== -->
+<section id="pillars">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">UNESCO AI Competency Framework</span>
+      <h2 class="section-title" style="color:white">4 Core <span style="color:var(--gold)">AI Skills</span> for Every Child</h2>
+      <p class="section-desc">Every chapter helps students become great at the 4 most important AI competencies in the world — following UNESCO's global AI learning framework.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card reveal">
+        <span class="pillar-num">1</span>
+        <span class="pillar-icon">🧠</span>
+        <div class="pillar-title">Understand AI</div>
+        <div class="pillar-body">Learn what AI is and how it works. Like magic, but with rules! From patterns to predictions, students build a solid AI foundation.</div>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-num">2</span>
+        <span class="pillar-icon">🛡️</span>
+        <div class="pillar-title">Use AI Safely</div>
+        <div class="pillar-body">Play with 100% safe, child-friendly apps and games. Learn about privacy, passwords, and digital footprints.</div>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-num">3</span>
+        <span class="pillar-icon">🎨</span>
+        <div class="pillar-title">Create with AI</div>
+        <div class="pillar-body">Make stories, drawings, batik designs, and projects with AI help. Students become creators, not just consumers.</div>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-num">4</span>
+        <span class="pillar-icon">⚖️</span>
+        <div class="pillar-title">Think Wisely</div>
+        <div class="pillar-body">Always be fair, protect privacy, and use AI to help people. Ethics, bias awareness, and responsible AI use.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== YEAR-BY-YEAR CURRICULUM ===== -->
+<section id="curriculum">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">KSSR Year 1 – 6 Curriculum</span>
+      <h2 class="section-title">A <span>6-Year Journey</span> of Discovery</h2>
+      <p class="section-desc">Each chapter is carefully crafted for each year group, building knowledge progressively — from friendly introductions in Year 1 to ethical AI leadership in Year 6.</p>
+    </div>
+    <div class="year-tabs">
+      <div class="year-tab active" onclick="showYear(1,this)">Year 1</div>
+      <div class="year-tab" onclick="showYear(2,this)">Year 2</div>
+      <div class="year-tab" onclick="showYear(3,this)">Year 3</div>
+      <div class="year-tab" onclick="showYear(4,this)">Year 4</div>
+      <div class="year-tab" onclick="showYear(5,this)">Year 5</div>
+      <div class="year-tab" onclick="showYear(6,this)">Year 6</div>
+    </div>
+
+    <!-- Year 1 -->
+    <div class="year-panel active" id="year-1">
+      <div class="year-content">
+        <div class="year-text">
+          <span class="year-icon-big">🤖</span>
+          <div class="year-heading">Year 1 — AI as a Friend</div>
+          <div class="year-tagline">Welcome to Year 1! Let's meet Aida! 👋</div>
+          <div class="year-body">This is Aida — she lives inside phones and computers. Students discover AI everywhere in their daily life: from "Ok Google, play Negaraku" to Grab showing the fastest way home. Learn that AI needs electricity, information, and human-written rules to work.</div>
+          <ul class="year-activities">
+            <li><div class="ya-dot">A1</div><strong>AI Hunt at Home</strong> — Draw all things in your house that have AI inside</li>
+            <li><div class="ya-dot">🎮</div><strong>Simon Says with Aida</strong> — Play the classic game in the AR app (English & BM)</li>
+            <li><div class="ya-dot">✍️</div><strong>Year 1 Promise</strong> — Sign your first AI promise: "I will use AI to help people!"</li>
+          </ul>
+        </div>
+        <div class="year-visual">
+          <div class="skill-card">
+            <div class="skill-card-title">🌟 Key Concept: What is AI?</div>
+            <div class="skill-card-body">AI (Artificial Intelligence) is a smart computer program that can learn and think a little like humans. It needs electricity, information, and human-written rules to work.</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">🏠 Where We Find AI</div>
+            <div class="skill-card-body">Google Assistant, YouTube recommendations, Smart TVs, Grab navigation — AI is all around us every day!</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">💛 Good Manners with AI</div>
+            <div class="skill-card-body">Even though AI cannot feel happy or sad, we still say "Please" and "Thank you". Good manners make the world better!</div>
+          </div>
+          <div class="year-badge-earn">
+            <span class="badge-icon">🏅</span>
+            <div class="badge-text"><strong>Badge: AI Friend</strong><span>Awarded upon completing Year 1 activities</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Year 2 -->
+    <div class="year-panel" id="year-2">
+      <div class="year-content">
+        <div class="year-text">
+          <span class="year-icon-big">🔍</span>
+          <div class="year-heading">Year 2 — Patterns & Predictions</div>
+          <div class="year-tagline">AI loves finding patterns! 🎯</div>
+          <div class="year-body">Students learn how AI identifies patterns — Red, Blue, Red, Blue → next is Red! Through real Malaysian examples like flood prediction in Kelantan and beautiful batik design generation, children discover how AI learns from examples.</div>
+          <ul class="year-activities">
+            <li><div class="ya-dot">A2</div><strong>Pattern Train</strong> — Cut out cards, arrange animals/fruits, predict the next one</li>
+            <li><div class="ya-dot">🎮</div><strong>Predict the Next Fruit</strong> — Mango, Rambutan, Mango… what's next? (AR app)</li>
+            <li><div class="ya-dot">🎨</div><strong>AI in Batik</strong> — See how AI learns old patterns and creates new batik designs!</li>
+          </ul>
+        </div>
+        <div class="year-visual">
+          <div class="skill-card">
+            <div class="skill-card-title">🌊 Malaysian Example: Flood Warning</div>
+            <div class="skill-card-body">In Kelantan, AI looks at river pictures every day. If the pattern says "water rising fast", it sends an SMS: "Be careful, flood may come!"</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">⚠️ Sometimes AI is Wrong!</div>
+            <div class="skill-card-body">If we give wrong examples, AI learns wrong things. That is why humans must teach carefully. We are responsible for what AI learns!</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">🎨 AI in Batik Design</div>
+            <div class="skill-card-body">Some beautiful new batik designs are made with AI help — it learns traditional patterns and creates new ones that honour Malaysian heritage.</div>
+          </div>
+          <div class="year-badge-earn">
+            <span class="badge-icon">🏅</span>
+            <div class="badge-text"><strong>Badge: Pattern Master</strong><span>Awarded upon completing Year 2 activities</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Year 3 -->
+    <div class="year-panel" id="year-3">
+      <div class="year-content">
+        <div class="year-text">
+          <span class="year-icon-big">🎓</span>
+          <div class="year-heading">Year 3 — Learning with AI</div>
+          <div class="year-tagline">Now we teach AI, just like teachers teach us! 🐯</div>
+          <div class="year-body">Students discover how AI learns by being shown thousands of examples. The exciting Malaysian example: scientists use AI cameras to count Malayan tigers in the jungle automatically! Children also learn the critical privacy rule: never share personal info without permission.</div>
+          <ul class="year-activities">
+            <li><div class="ya-dot">A3</div><strong>Teach AI Animals</strong> — Draw 5 cats and 5 tigers. "Feed" them to Aida!</li>
+            <li><div class="ya-dot">🎮</div><strong>20 Questions with AI</strong> — Can Aida guess what you're thinking? (AR app)</li>
+            <li><div class="ya-dot">🌱</div><strong>Smart Plant Pot</strong> — Design a flower pot that uses AI to know when to water</li>
+          </ul>
+        </div>
+        <div class="year-visual">
+          <div class="skill-card">
+            <div class="skill-card-title">🐯 Saving the Malayan Tiger</div>
+            <div class="skill-card-body">Scientists show AI thousands of jungle photos. Now AI can count tigers from forest cameras automatically — helping conservation efforts!</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">📱 AI in School</div>
+            <div class="skill-card-body">Pandai and EGK AIAdv AR apps use AI to help Malaysian children study better — personalised learning for every child.</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">🔐 Privacy Rule!</div>
+            <div class="skill-card-body">Never put your full name, address, or photo into AI without Mummy, Daddy, or teacher's permission. Protect your digital footprint!</div>
+          </div>
+          <div class="year-badge-earn">
+            <span class="badge-icon">🏅</span>
+            <div class="badge-text"><strong>Certificate: AI Trainer</strong><span>Awarded upon completing Year 3 activities</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Year 4 -->
+    <div class="year-panel" id="year-4">
+      <div class="year-content">
+        <div class="year-text">
+          <span class="year-icon-big">✍️</span>
+          <div class="year-heading">Year 4 — Creating Stories with AI</div>
+          <div class="year-tagline">This year we become creators! 🎨</div>
+          <div class="year-body">Students learn to use prompts to guide AI in creating stories, art, and projects. Using beloved Malaysian folktales like Sang Kancil, Hang Tuah, and Mahsuri as starting points, children remix tradition with AI creativity!</div>
+          <ul class="year-activities">
+            <li><div class="ya-dot">A4</div><strong>Malaysian Folktale Remix</strong> — Add an AI robot friend to Sang Kancil, Hang Tuah, or Mahsuri!</li>
+            <li><div class="ya-dot">🎨</div><strong>AI Art</strong> — "A dragon dancing lion dance during Chinese New Year" — safe AI art generator</li>
+            <li><div class="ya-dot">📖</div><strong>Class AI Story Book</strong> — Everyone writes one page; teacher makes a real book!</li>
+          </ul>
+        </div>
+        <div class="year-visual">
+          <div class="skill-card">
+            <div class="skill-card-title">💬 What is a Prompt?</div>
+            <div class="skill-card-body">A prompt is a short instruction you give to AI. Example: "Write a story about a brave mouse in Penang." You are the boss — AI starts, YOU continue!</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">🦧 Try This Prompt!</div>
+            <div class="skill-card-body">"A little orangutan who loves nasi lemak" — what story would AI write? What would YOU add to the story?</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">⚠️ Remember</div>
+            <div class="skill-card-body">AI copies what it sees. We decide what it learns! Always choose kind, fair, and honest examples to guide your AI.</div>
+          </div>
+          <div class="year-badge-earn">
+            <span class="badge-icon">🏅</span>
+            <div class="badge-text"><strong>Badge: Story Wizard</strong><span>Awarded upon completing Year 4 activities</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Year 5 -->
+    <div class="year-panel" id="year-5">
+      <div class="year-content">
+        <div class="year-text">
+          <span class="year-icon-big">🌆</span>
+          <div class="year-heading">Year 5 — AI in the Real World</div>
+          <div class="year-tagline">See how AI changes jobs and helps Malaysia! 🚀</div>
+          <div class="year-body">Students explore how AI is already transforming Malaysian industries — from Doctor AI reading X-rays faster, to smart city traffic lights in Putrajaya that turn green when an ambulance is coming. The future is here!</div>
+          <ul class="year-activities">
+            <li><div class="ya-dot">A5</div><strong>Future Job Designer</strong> — Draw yourself in 2040 with your AI helper!</li>
+            <li><div class="ya-dot">🎮</div><strong>AI Career Match</strong> — Quiz matches your talents to future jobs (AR app)</li>
+            <li><div class="ya-dot">🗣️</div><strong>Debate Corner</strong> — "Should robots be allowed to mark our exam papers?" Team Yes vs No!</li>
+          </ul>
+        </div>
+        <div class="year-visual">
+          <div class="skill-card">
+            <div class="skill-card-title">💼 AI Jobs in Malaysia</div>
+            <div class="skill-card-body">Doctor AI reads X-rays faster • Farmer AI knows exactly when to water padi • Grab AI finds fastest route • Bank AI stops thieves</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">🏙️ Smart City: Putrajaya</div>
+            <div class="skill-card-body">Traffic lights turn green faster when an ambulance is coming because AI hears the siren! AI drones plant mangrove trees and monitor coral reefs.</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">⚖️ Good Points & Not-So-Good</div>
+            <div class="skill-card-body">✅ Saves time, helps rural areas<br>⚠️ Some jobs change, machines can make mistakes. Humans must stay informed!</div>
+          </div>
+          <div class="year-badge-earn">
+            <span class="badge-icon">🏅</span>
+            <div class="badge-text"><strong>Badge: Future Builder</strong><span>Awarded upon completing Year 5 activities</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Year 6 -->
+    <div class="year-panel" id="year-6">
+      <div class="year-content">
+        <div class="year-text">
+          <span class="year-icon-big">⚖️</span>
+          <div class="year-heading">Year 6 — Ethical & Responsible AI</div>
+          <div class="year-tagline">The most important chapter. Ethical means doing the right thing even when no one is watching! 🌟</div>
+          <div class="year-body">Students graduate as Responsible AI Leaders — learning Malaysia's 5 Big AI Rules, understanding deepfakes and bias, and completing a final project designing AI solutions for real Malaysian problems.</div>
+          <ul class="year-activities">
+            <li><div class="ya-dot">A6</div><strong>Find the Bias</strong> — Look at pictures, circle unfair examples and fix them!</li>
+            <li><div class="ya-dot">✍️</div><strong>Our AI Promise</strong> — Write 5 class rules and everyone signs their name</li>
+            <li><div class="ya-dot">🏆</div><strong>Final Project</strong> — Design an AI to solve rubbish, traffic, bullying, floods, or loneliness in Malaysia!</li>
+          </ul>
+        </div>
+        <div class="year-visual">
+          <div class="skill-card">
+            <div class="skill-card-title">📜 Malaysia's 5 Big AI Rules</div>
+            <div class="skill-card-body">1. Fair to all races & religions • 2. Protect privacy • 3. No fake news • 4. Keep humans in control • 5. Help the environment</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">👹 The Bias Monster</div>
+            <div class="skill-card-body">If we only teach AI photos of rich people, it thinks everyone is rich. That is unfair! We must teach AI with diverse, representative examples.</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">⚠️ Deepfake Danger</div>
+            <div class="skill-card-body">AI can make fake videos of people saying things they never said. Always check before sharing! Be a responsible digital citizen.</div>
+          </div>
+          <div class="year-badge-earn">
+            <span class="badge-icon">🎓</span>
+            <div class="badge-text"><strong>Certificate: Responsible AI Leader</strong><span>Print and get teacher's signature — you graduate!</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== MEET AIDA ===== -->
+<section id="meet-aida">
+  <div class="container">
+    <div class="aida-grid">
+      <div class="aida-img-wrap reveal">
+        <div class="aida-ring"></div>
+        <img class="aida-main" src="https://egkhor.com.my/home/wp-content/uploads/2026/04/aida.png" alt="Aida the AI Robot">
+        <div class="aida-bubble ab1">🇲🇾 Speaks English & BM!</div>
+        <div class="aida-bubble ab2">🎓 Gives certificates!</div>
+        <div class="aida-bubble ab3">🎆 Launches fireworks!</div>
+      </div>
+      <div class="reveal">
+        <span class="section-label">Your AI Guide</span>
+        <h2 class="section-title">Meet <span>Aida</span> 🤖</h2>
+        <p class="section-desc">Aida is the friendly AI robot created exclusively for this syllabus. She jumps out of the book in 3D through the AR app and becomes your child's personal AI learning companion for 6 full years!</p>
+        <div class="aida-traits">
+          <div class="trait">
+            <div class="trait-icon">🗣️</div>
+            <div class="trait-name">Bilingual</div>
+            <div class="trait-desc">Speaks English & Bahasa Melayu</div>
+          </div>
+          <div class="trait">
+            <div class="trait-icon">🎮</div>
+            <div class="trait-name">Plays Games</div>
+            <div class="trait-desc">Simon Says, 20 Questions & more</div>
+          </div>
+          <div class="trait">
+            <div class="trait-icon">🎨</div>
+            <div class="trait-name">Creates Art</div>
+            <div class="trait-desc">Paints AI art with you</div>
+          </div>
+          <div class="trait">
+            <div class="trait-icon">🔮</div>
+            <div class="trait-name">Reads Minds</div>
+            <div class="trait-desc">Guesses what you're thinking!</div>
+          </div>
+          <div class="trait">
+            <div class="trait-icon">💼</div>
+            <div class="trait-name">Career Guide</div>
+            <div class="trait-desc">Tells you your future AI job</div>
+          </div>
+          <div class="trait">
+            <div class="trait-icon">🎓</div>
+            <div class="trait-name">Celebrates You</div>
+            <div class="trait-desc">Fireworks & golden certificate!</div>
+          </div>
+        </div>
+        <p style="font-size:0.95rem;color:#607d8b;margin-top:10px;font-style:italic">"Congratulations, my dear! You are now a True AI Explorer! All of Malaysia is proud of you!" — <strong>Aida</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== APP DOWNLOAD ===== -->
+<section id="app">
+  <div class="container">
+    <div class="app-wrap">
+      <div class="reveal">
+        <span class="section-label">Free Companion App</span>
+        <h2 class="section-title">EGK AIAdv AR <span>App</span> 📱</h2>
+        <p class="section-desc">Scan any QR code in the book and watch Aida jump out of the page in real 3D augmented reality! The app brings every chapter to life with interactive games, AR experiences, and voice narration.</p>
+        <div class="app-features">
+          <div class="app-feat">
+            <span class="feat-icon">🥽</span>
+            <div class="feat-text"><strong>Augmented Reality (AR)</strong><span>Aida appears in real 3D right in your room!</span></div>
+          </div>
+          <div class="app-feat">
+            <span class="feat-icon">🎮</span>
+            <div class="feat-text"><strong>Interactive Games</strong><span>Simon Says, 20 Questions, Pattern Games & more</span></div>
+          </div>
+          <div class="app-feat">
+            <span class="feat-icon">🔊</span>
+            <div class="feat-text"><strong>Voice Narration</strong><span>English & Bahasa Melayu read-aloud support</span></div>
+          </div>
+          <div class="app-feat">
+            <span class="feat-icon">🎨</span>
+            <div class="feat-text"><strong>AI Art Generator</strong><span>Safe, Malaysian-themed AI art creation</span></div>
+          </div>
+          <div class="app-feat">
+            <span class="feat-icon">🎓</span>
+            <div class="feat-text"><strong>Graduation Ceremony</strong><span>Complete Year 6 and receive a golden certificate from Aida!</span></div>
+          </div>
+        </div>
+        <div class="app-dl-btns">
+          <a href="https://apps.apple.com/my/app/egk-aiadv-ar/id6756287562" target="_blank" class="app-btn">
+            <span class="app-btn-icon">🍎</span>
+            <div class="app-btn-text"><small>Download on the</small><strong>App Store</strong></div>
+          </a>
+          <a href="https://buy.stripe.com/8x26oGgQ97hb3Iz5QV6Zy0c" target="_blank" class="app-btn">
+            <span class="app-btn-icon">🤖</span>
+            <div class="app-btn-text"><small>Get it on</small><strong>Android</strong></div>
+          </a>
+        </div>
+      </div>
+      <div class="app-visual reveal">
+        <div class="app-glow"></div>
+        <img class="app-aida" src="https://egkhor.com.my/home/wp-content/uploads/2026/04/aida.png" alt="Aida AR">
+        <div style="margin-top:20px">
+          <img src="https://egkhor.com.my/home/wp-content/uploads/2025/12/egkaiadv.png" alt="App Icon" style="width:80px;border-radius:18px;box-shadow:0 8px 28px rgba(21,101,192,0.3)">
+          <p style="margin-top:8px;font-size:0.88rem;color:#607d8b;font-weight:700">EGK AIAdv AR</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPLIANCE ===== -->
+<section id="compliance">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Curriculum Alignment</span>
+      <h2 class="section-title">Fully <span>Aligned</span> with National & Global Standards</h2>
+      <p class="section-desc">This syllabus was specially designed to address the AI education gap at primary level — bringing UNESCO's K-12 AI framework down to Years 1–6, making Malaysia a pioneer in early AI literacy.</p>
+    </div>
+    <div class="compliance-grid">
+      <div class="comp-card reveal">
+        <div class="comp-icon">🌐</div>
+        <div class="comp-title">UNESCO AI Competency Framework 2022</div>
+        <div class="comp-body">Follows world's best AI learning rules from UNESCO (United Nations). Covers all four core competencies for students.</div>
+      </div>
+      <div class="comp-card reveal">
+        <div class="comp-icon">📘</div>
+        <div class="comp-title">KSSR Compliant (Year 1–6)</div>
+        <div class="comp-body">Perfectly matched to Malaysia's primary school curriculum standard (Kurikulum Standard Sekolah Rendah).</div>
+      </div>
+      <div class="comp-card reveal">
+        <div class="comp-icon">🏫</div>
+        <div class="comp-title">Malaysia Education Blueprint 2013–2025</div>
+        <div class="comp-body">Aligned with Malaysia's national education transformation plan for 21st century learning.</div>
+      </div>
+      <div class="comp-card reveal">
+        <div class="comp-icon">🤖</div>
+        <div class="comp-title">National AI Roadmap 2021–2025</div>
+        <div class="comp-body">Supports Malaysia's national AI strategy by building AI literacy from grassroots primary level.</div>
+      </div>
+      <div class="comp-card reveal">
+        <div class="comp-icon">🔄</div>
+        <div class="comp-title">UNESCO AI for Teachers 2024 (pf0000391104)</div>
+        <div class="comp-body">Compatible with UNESCO's 2024 AI Curriculum for Secondary School Teachers — ensuring vertical alignment.</div>
+      </div>
+      <div class="comp-card reveal">
+        <div class="comp-icon">🏆</div>
+        <div class="comp-title">First in Malaysia — Primary AI Education</div>
+        <div class="comp-body">The FIRST complete, structured AI education book series for Malaysian primary students, Years 1–6.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MALAYSIA THEMES ===== -->
+<section id="malaysia">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">100% Malaysian</span>
+      <h2 class="section-title">AI That <span style="color:var(--gold)">Loves Malaysia</span> 🇲🇾</h2>
+      <p class="section-desc">Every example, story, and activity is rooted in Malaysian culture, nature, and everyday life — making AI learning meaningful and relevant for every Malaysian child.</p>
+    </div>
+    <div class="malaysia-grid">
+      <div class="mcard reveal">
+        <div class="mcard-icon">🐯</div>
+        <div class="mcard-title">Saving the Malayan Tiger</div>
+        <div class="mcard-body">AI counts tigers from jungle cameras, helping conservation of our national animal.</div>
+      </div>
+      <div class="mcard reveal">
+        <div class="mcard-icon">🌊</div>
+        <div class="mcard-title">Flood Prediction</div>
+        <div class="mcard-body">AI monitors Kelantan rivers and sends SMS flood warnings to keep communities safe.</div>
+      </div>
+      <div class="mcard reveal">
+        <div class="mcard-icon">🌿</div>
+        <div class="mcard-title">Finding the Ripest Durian</div>
+        <div class="mcard-body">AI helps farmers know exactly when the King of Fruits is perfectly ripe for harvest!</div>
+      </div>
+      <div class="mcard reveal">
+        <div class="mcard-icon">🎨</div>
+        <div class="mcard-title">AI Batik Design</div>
+        <div class="mcard-body">AI learns traditional batik patterns and creates beautiful new designs that honour our heritage.</div>
+      </div>
+      <div class="mcard reveal">
+        <div class="mcard-icon">🚦</div>
+        <div class="mcard-title">Smart Putrajaya</div>
+        <div class="mcard-body">Traffic lights turn green faster when ambulances approach — AI saves lives in our capital city.</div>
+      </div>
+      <div class="mcard reveal">
+        <div class="mcard-icon">🌱</div>
+        <div class="mcard-title">AI for Nature</div>
+        <div class="mcard-body">AI drones plant mangrove trees and monitor coral reef health along Malaysia's beautiful coastlines.</div>
+      </div>
+      <div class="mcard reveal">
+        <div class="mcard-icon">🏥</div>
+        <div class="mcard-title">Doctor AI</div>
+        <div class="mcard-body">AI reads X-rays faster, helping Malaysian doctors serve more patients — especially in rural areas.</div>
+      </div>
+      <div class="mcard reveal">
+        <div class="mcard-icon">🦅</div>
+        <div class="mcard-title">Malaysian Folktales</div>
+        <div class="mcard-body">Sang Kancil, Hang Tuah, Mahsuri — beloved stories remixed with AI robot companions!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GLOSSARY PREVIEW ===== -->
+<section id="glossary">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">AI Vocabulary</span>
+      <h2 class="section-title">Learn the <span>Language of AI</span></h2>
+      <p class="section-desc">The book includes a comprehensive glossary of key AI terms — explained in simple, child-friendly language. Available in all 3 languages!</p>
+    </div>
+    <div class="glossary-grid">
+      <div class="gterm reveal"><div class="gterm-word">Algorithm 算法 / Algoritma</div><div class="gterm-def">Steps a computer follows, like a recipe for AI.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Artificial Intelligence (AI)</div><div class="gterm-def">Smart programs that can learn and think a little like humans.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Bias 偏见 / Bias</div><div class="gterm-def">When AI is unfair because it learned wrong examples.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Chatbot 聊天机器人</div><div class="gterm-def">A robot you can talk to on a computer or phone.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Computer Vision</div><div class="gterm-def">AI that can "see" and understand pictures or videos.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Data 数据 / Data</div><div class="gterm-def">All information (words, numbers, pictures) that AI uses to learn.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Deepfake 深度伪造</div><div class="gterm-def">A fake video made by AI that looks 100% real.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Digital Footprint</div><div class="gterm-def">Trail you leave online every time you click or type.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Ethics 伦理 / Etika</div><div class="gterm-def">Knowing what is right and wrong when using AI.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Machine Learning</div><div class="gterm-def">How AI gets smarter by looking at lots of examples.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Pattern 模式 / Corak</div><div class="gterm-def">Things that repeat — AI loves finding patterns!</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Privacy 隐私 / Privasi</div><div class="gterm-def">Keeping your personal information safe and secret.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Prompt 提示 / Arahan</div><div class="gterm-def">Short instruction you give to AI. "Draw a dragon eating durian!"</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Training 训练 / Latihan</div><div class="gterm-def">Teaching AI by showing it lots of examples.</div></div>
+      <div class="gterm reveal"><div class="gterm-word">Voice Assistant</div><div class="gterm-def">AI you talk to — like Siri, Google Assistant, or "Ok Google".</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROMISE ===== -->
+<section id="promise">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">The AI Explorer's Promise</span>
+    </div>
+    <div class="promise-box reveal">
+      <div class="promise-text">
+        "I promise to use AI to help people and animals,<br>
+        never to hurt or bully anyone.<br>
+        I will always be fair, protect privacy,<br>
+        and use AI to help build a better Malaysia.<br>
+        I will keep learning, stay kind,<br>
+        and help make AI good and fair for everyone."
+      </div>
+      <div class="promise-sig">— The <strong>AI Explorer's Promise</strong>, EGK AI Adventure Series</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOUNDER ===== -->
+<section id="founder">
+  <div class="container">
+    <div class="founder-grid">
+      <div class="founder-card reveal">
+        <div class="founder-icon">👨‍💼</div>
+        <div class="founder-name">Isaac Khor Eng Gian</div>
+        <div class="founder-role">Author, Founder & CEO</div>
+        <div class="founder-company">EGK Microelectronic Solutions Group Sdn. Bhd.</div>
+        <div style="margin-top:16px">
+          <img src="https://egkhor.com.my/home/wp-content/uploads/2026/02/cropped-IMG_7598.png" alt="EGK Logo" style="height:50px;filter:brightness(0)invert(1);opacity:0.8">
+        </div>
+      </div>
+      <div class="reveal">
+        <span class="section-label">About the Author</span>
+        <h2 class="section-title">Made in <span>Penang</span>, for Every Malaysian Child</h2>
+        <blockquote class="founder-quote">
+          "I developed this syllabus to overwrite the proposed UNESCO K-12 AI Curriculum (2022 UNESCO AI Competency Framework for Students), focusing on AI exposure at the foundational education level (ages 6–12) rather than secondary only. My syllabus is easily adaptable and school-standard compliant, fully aligned with the UNESCO Artificial Intelligence Curriculum for Secondary School Teachers 2024 (pf0000391104)."
+        </blockquote>
+        <p style="font-size:0.95rem;color:#4a6080;line-height:1.7;margin-bottom:16px">
+          Proudly created in Penang, Malaysia — this series represents a bold vision to give every Malaysian primary school child a head start in AI literacy, with strong Malaysian values at the core.
+        </p>
+        <div class="founder-contact">
+          <div class="fc-item"><span class="fc-icon">📍</span>8 Lintang Beringin 8, Diamond Valley Industrial Park, 11960 Batu Maung, Penang, Malaysia</div>
+          <div class="fc-item"><span class="fc-icon">📞</span>604-505 9700</div>
+          <div class="fc-item"><span class="fc-icon">✉️</span><a href="mailto:sales@egkhor.com.my" style="color:var(--royal)">sales@egkhor.com.my</a></div>
+          <div class="fc-item"><span class="fc-icon">🌐</span><a href="http://www.egkhor.com.my" target="_blank" style="color:var(--royal)">www.egkhor.com.my</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">
+        <img src="https://egkhor.com.my/home/wp-content/uploads/2026/02/cropped-IMG_7598.png" alt="EGK Logo">
+      </div>
+      <div class="footer-about">
+        EGK Microelectronic Solutions Group Sdn. Bhd.<br>
+        Malaysia's first complete AI education book series for primary students (KSSR Year 1–6).<br>
+        UNESCO Aligned · KSSR Compliant · Available in 3 Languages<br><br>
+        © EGK Microelectronic Solutions Group Sdn. Bhd. 2025. All rights reserved.
+      </div>
+    </div>
+    <div>
+      <div class="footer-title">Quick Links</div>
+      <ul class="footer-links">
+        <li><a href="#about">About the Book</a></li>
+        <li><a href="#books">All 3 Editions</a></li>
+        <li><a href="#curriculum">Curriculum (Year 1–6)</a></li>
+        <li><a href="#meet-aida">Meet Aida</a></li>
+        <li><a href="#app">Download App</a></li>
+        <li><a href="#compliance">UNESCO Compliance</a></li>
+        <li><a href="#founder">About Isaac Khor</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-title">Get the Books</div>
+      <ul class="footer-links">
+        <li><a href="mailto:sales@egkhor.com.my">📧 Order by Email</a></li>
+        <li><a href="https://apps.apple.com/my/app/egk-aiadv-ar/id6756287562" target="_blank">🍎 iOS App Store</a></li>
+        <li><a href="https://buy.stripe.com/8x26oGgQ97hb3Iz5QV6Zy0c" target="_blank">🤖 Android Version</a></li>
+        <li><a href="http://www.egkhor.com.my" target="_blank">🌐 EGK Website</a></li>
+        <li><a href="tel:604-5059700">📞 Call Us</a></li>
+      </ul>
+      <div style="margin-top:20px">
+        <div style="font-size:0.82rem;color:#607d8b;margin-bottom:8px">ISBNs:</div>
+        <div style="font-size:0.78rem;color:#607d8b;line-height:2">
+          EN: 978-629-94581-5-9<br>
+          BM: 978-629-94581-4-2<br>
+          ZH: 978-629-94581-8-0
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 EGK Microelectronic Solutions Group Sdn. Bhd. · Proudly Made in Penang 🇲🇾</span>
+    <span style="color:var(--gold)">✨ You are now an official AI Explorer!</span>
+  </div>
+</footer>
+
+<script>
+// Generate stars
+const starsEl = document.getElementById('stars');
+for(let i=0;i<60;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random()*3+1;
+  s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+  starsEl.appendChild(s);
+}
+
+// Year tabs
+function showYear(n, el) {
+  document.querySelectorAll('.year-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.year-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('year-'+n).classList.add('active');
+  el.classList.add('active');
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
